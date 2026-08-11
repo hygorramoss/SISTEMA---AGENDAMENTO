@@ -82,6 +82,7 @@ a{color:inherit;text-decoration:none}
   box-shadow:0 12px 30px -12px var(--wine-glow);transition:.18s;
 }
 .login-card button[type=submit]:hover{transform:translateY(-1px);box-shadow:0 16px 36px -12px var(--wine-glow)}
+.login-err{display:none;margin:2px 0 4px;background:rgba(220,64,96,.14);border:1px solid rgba(220,64,96,.34);color:#ffbac9;font-size:12.5px;padding:9px 12px;border-radius:11px;text-align:center;line-height:1.35}
 .login-hint{margin-top:18px;font-size:11.5px;color:var(--muted-2)}
 .login-verse{margin-top:22px;padding-top:18px;border-top:1px solid rgba(234,169,205,.14);font-family:var(--ff-disp);font-style:italic;font-size:13px;color:var(--rose);line-height:1.5}
 
@@ -329,16 +330,17 @@ tbody tr:last-child td{border-bottom:none}
     <div class="sub">Espaço de Beleza</div>
     <form id="loginForm">
       <div class="field">
-        <label>Usuária</label>
-        <input id="lgUser" value="recepcao" autocomplete="username">
+        <label>E-mail</label>
+        <input id="lgUser" type="email" placeholder="seu@email.com" autocomplete="username">
       </div>
       <div class="field">
         <label>Senha</label>
-        <input id="lgPass" type="password" value="1234" autocomplete="current-password">
+        <input id="lgPass" type="password" placeholder="••••••••" autocomplete="current-password">
       </div>
+      <div id="lgErr" class="login-err"></div>
       <button type="submit">Entrar no painel</button>
     </form>
-    <div class="login-hint">Acesso de demonstração já preenchido — é só entrar.</div>
+    <div class="login-hint" id="loginHint">Entre com o e-mail e a senha cadastrados.</div>
     <div class="login-verse">"Não se preocupem com beleza exterior... A verdadeira beleza vem do interior." <br>— inspirado em 1 Pedro 3</div>
   </div>
 </div>
@@ -409,12 +411,12 @@ tbody tr:last-child td{border-bottom:none}
    campos estiverem vazios, o sistema roda em modo demonstração,
    salvando tudo no navegador (localStorage). */
 const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyAQNpiqf9AZoCa32RXnOi_D3qN7SV3c79w",
+  authDomain: "sistema-agendamento-d1fb6.firebaseapp.com",
+  projectId: "sistema-agendamento-d1fb6",
+  storageBucket: "sistema-agendamento-d1fb6.firebasestorage.app",
+  messagingSenderId: "790545578028",
+  appId: "1:790545578028:web:9ef6d8a42113f8d72df989"
 };
 const USE_FIREBASE = !!FIREBASE_CONFIG.apiKey;
 
@@ -433,9 +435,11 @@ const DB = {
       try{
         await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
         await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+        await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
         firebase.initializeApp(FIREBASE_CONFIG);
         this.fb = firebase.firestore();
-      }catch(e){ console.warn('Firebase indisponível, usando modo demo.',e); }
+        AUTH.a = firebase.auth();
+      }catch(e){ console.warn('Firebase indisponível, usando modo demo.',e); this.fb=null; AUTH.a=null; }
     }
   },
   async loadAll(){
@@ -467,6 +471,27 @@ const DB = {
     else writeLS(c,cache[c]);
   }
 };
+
+/* ---------- (2b) AUTENTICAÇÃO (Firebase Auth) ----------
+   Quando a config do Firebase está preenchida, o login passa a ser
+   real (e-mail + senha, validados na nuvem). Sem config, cai no
+   modo demonstração (qualquer acesso entra). */
+const AUTH = {
+  a:null,
+  active(){ return !!this.a; },
+  watch(cb){ if(this.a) this.a.onAuthStateChanged(cb); },
+  signIn(email,pass){ return this.a.signInWithEmailAndPassword(email,pass); },
+  signOut(){ return this.a? this.a.signOut() : Promise.resolve(); }
+};
+function authErro(ex){
+  const c = (ex && ex.code) || '';
+  if(c.indexOf('invalid-credential')>=0 || c.indexOf('wrong-password')>=0 || c.indexOf('user-not-found')>=0) return 'E-mail ou senha incorretos.';
+  if(c.indexOf('invalid-email')>=0) return 'E-mail inválido.';
+  if(c.indexOf('user-disabled')>=0) return 'Este acesso foi desativado.';
+  if(c.indexOf('too-many-requests')>=0) return 'Muitas tentativas. Aguarde um instante e tente de novo.';
+  if(c.indexOf('network')>=0) return 'Sem conexão com a internet.';
+  return 'Não foi possível entrar. Confira os dados e tente novamente.';
+}
 function readLS(c){ try{ return JSON.parse(localStorage.getItem(LS_PREFIX+c)) || []; }catch(e){ return []; } }
 function writeLS(c,arr){ try{ localStorage.setItem(LS_PREFIX+c, JSON.stringify(arr)); }catch(e){} }
 function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=rej; document.head.appendChild(s); }); }
@@ -744,24 +769,69 @@ function toggleSide(open){
 }
 
 /* ---------- LOGIN ---------- */
-document.getElementById('loginForm').addEventListener('submit', e=>{
+document.getElementById('loginForm').addEventListener('submit', async e=>{
   e.preventDefault();
-  const u = document.getElementById('lgUser').value.trim() || 'recepcao';
-  sessionStorage.setItem('belaUser', u);
-  enterApp(u);
+  const err = document.getElementById('lgErr');
+  err.style.display='none';
+  const u = document.getElementById('lgUser').value.trim();
+  const p = document.getElementById('lgPass').value;
+  const btn = e.target.querySelector('button[type=submit]');
+
+  if(AUTH.active()){
+    if(!u || !p){ err.textContent='Preencha o e-mail e a senha.'; err.style.display='block'; return; }
+    btn.disabled=true; btn.textContent='Entrando…';
+    try{
+      await AUTH.signIn(u,p);
+      // o watch() abaixo detecta o login e abre o painel
+    }catch(ex){
+      btn.disabled=false; btn.textContent='Entrar no painel';
+      err.textContent = authErro(ex);
+      err.style.display='block';
+    }
+  }else{
+    // modo demonstração: qualquer acesso entra
+    const nome = u || 'recepcao';
+    sessionStorage.setItem('belaUser', nome);
+    await enterApp(nome, true);
+  }
 });
-function enterApp(u){
+
+function nomeDoAcesso(raw){
+  const base = (raw||'').split('@')[0] || 'recepcao';
+  return base==='recepcao' ? 'Recepção' : base.charAt(0).toUpperCase()+base.slice(1);
+}
+
+async function enterApp(idOrEmail, jaCarregado){
+  // No modo online os dados só são lidos DEPOIS do login — isso permite
+  // fechar as regras de segurança (acesso só a quem está autenticado).
+  // No modo demo os dados já foram carregados no boot.
+  if(AUTH.active() && !jaCarregado){
+    await DB.loadAll();
+    seedIfEmpty();
+    await DB.loadAll();
+  }
+  agendaDate = agendaDate || todayISO();
+  buildNav();
   document.getElementById('login').style.display='none';
   document.getElementById('app').style.display='block';
-  const name = u==='recepcao'? 'Recepção' : u.charAt(0).toUpperCase()+u.slice(1);
+  const name = nomeDoAcesso(idOrEmail);
   document.getElementById('userName').textContent = name;
   document.getElementById('userAv').textContent = initials(name);
+  const btn = document.querySelector('#loginForm button[type=submit]');
+  if(btn){ btn.disabled=false; btn.textContent='Entrar no painel'; }
   go('dashboard');
 }
-function logout(){
-  sessionStorage.removeItem('belaUser');
+
+function mostrarLogin(){
   document.getElementById('app').style.display='none';
   document.getElementById('login').style.display='grid';
+  const btn = document.querySelector('#loginForm button[type=submit]');
+  if(btn){ btn.disabled=false; btn.textContent='Entrar no painel'; }
+}
+
+function logout(){
+  if(AUTH.active()){ AUTH.signOut(); /* o watch() volta pra tela de login */ }
+  else { sessionStorage.removeItem('belaUser'); mostrarLogin(); }
 }
 
 /* ---------- BOOT ---------- */
@@ -769,17 +839,30 @@ async function boot(){
   document.getElementById('loginSeal').innerHTML = sealSVG(88);
   document.getElementById('sideSeal').innerHTML = sealSVG(38);
   await DB.init();
-  await DB.loadAll();
-  seedIfEmpty();
-  await DB.loadAll();
-  agendaDate = todayISO();
-  buildNav();
 
   const gs = document.getElementById('globalSearch');
   gs.addEventListener('input', ()=>{ if(current!=='clientes') go('clientes'); if(afterRender.clientes) window._cliFilter=gs.value, renderView('clientes'); });
 
-  const saved = sessionStorage.getItem('belaUser');
-  if(saved){ enterApp(saved); } // auto-entra se já logou nesta sessão
+  if(AUTH.active()){
+    // MODO ONLINE — login real (e-mail + senha). Espera o estado de auth:
+    document.getElementById('loginHint').textContent='Entre com o e-mail e a senha cadastrados.';
+    AUTH.watch(async user=>{
+      if(user){ await enterApp(user.email||'', false); }
+      else { mostrarLogin(); }
+    });
+  }else{
+    // MODO DEMONSTRAÇÃO — sem config Firebase: carrega tudo e libera acesso
+    await DB.loadAll();
+    seedIfEmpty();
+    await DB.loadAll();
+    agendaDate = todayISO();
+    buildNav();
+    document.getElementById('loginHint').textContent='Modo demonstração — clique em Entrar para acessar.';
+    document.getElementById('lgUser').value='recepcao@bela.com';
+    document.getElementById('lgPass').value='demo';
+    const saved = sessionStorage.getItem('belaUser');
+    if(saved){ await enterApp(saved, true); } // auto-entra se já logou nesta sessão
+  }
 }
 
 /* ============================================================
