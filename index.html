@@ -1,12 +1,12 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
+<!DOCTYPE html>
+<!-- saved from url=(0072)file:///C:/Users/hygor.ramos/Downloads/bela-aos-olhos-de-deus%20(3).html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bela aos Olhos de Deus · Gestão do Espaço de Beleza</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./Bela aos Olhos de Deus · Gestão do Espaço de Beleza_files/css2" rel="stylesheet">
 <style>
 :root{
   --bg:#170810; --bg-2:#20101a; --surface:#291422; --surface-2:#331a29;
@@ -65,6 +65,7 @@ a{color:inherit;text-decoration:none}
   animation:rise .6s cubic-bezier(.16,.84,.44,1);
 }
 @keyframes rise{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
 .login-card .seal{margin:0 auto 18px}
 .login-card h1{font-family:var(--ff-disp);font-weight:600;font-size:23px;letter-spacing:.3px;line-height:1.2}
 .login-card .sub{color:var(--rose);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:6px;font-weight:500}
@@ -318,13 +319,23 @@ tbody tr:last-child td{border-bottom:none}
   .split-2,.split-3{grid-template-columns:1fr!important}
 }
 </style>
-</head>
+<script src="./Bela aos Olhos de Deus · Gestão do Espaço de Beleza_files/firebase-app-compat.js.transferir"></script><script src="./Bela aos Olhos de Deus · Gestão do Espaço de Beleza_files/firebase-firestore-compat.js.transferir"></script></head>
 <body>
 
 <!-- ===================== LOGIN ===================== -->
-<div id="login">
+<div id="login" style="display: none;">
   <div class="login-card">
-    <div id="loginSeal"></div>
+    <div id="loginSeal"><span class="seal"><svg width="88" height="88" viewBox="0 0 200 200" fill="none">
+    <defs><path id="tp88" d="M 100,100 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0"></path></defs>
+    <circle cx="100" cy="100" r="92" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1.5"></circle>
+    <circle cx="100" cy="100" r="80" fill="none" stroke="#fff" stroke-width="2.4"></circle>
+    <text font-family="Poppins,sans-serif" font-size="12.5" letter-spacing="3.4" fill="#fff" font-weight="500">
+      <textpath href="#tp88" startOffset="4%">BELA AOS OLHOS DE DEUS · ESPAÇO DE BELEZA</textpath>
+    </text>
+    <path d="M74 66 C60 74 60 96 78 104 C92 110 100 96 96 84 C93 74 82 74 80 84 C79 92 88 96 94 90" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"></path>
+    <path d="M104 70 C116 84 118 112 108 138 C104 148 98 150 100 140 C104 118 104 92 104 70 Z" fill="#fff" fill-opacity=".92"></path>
+    <path d="M104 78 C112 90 113 116 106 134" fill="none" stroke="#7a1540" stroke-width="1.6" stroke-linecap="round"></path>
+  </svg></span></div>
     <h1>Bela aos Olhos de Deus</h1>
     <div class="sub">Espaço de Beleza</div>
     <form id="loginForm">
@@ -338,25 +349,36 @@ tbody tr:last-child td{border-bottom:none}
       </div>
       <button type="submit">Entrar no painel</button>
     </form>
+    <div style="text-align:center;margin-top:14px"><button type="button" onclick="abrirRecuperarSenha()" style="background:none;border:none;color:var(--rose);font-size:12.5px;cursor:pointer;padding:4px">Esqueci a senha</button></div>
     <div class="login-hint">Acesso de demonstração já preenchido — é só entrar.</div>
     <div class="login-verse">"Não se preocupem com beleza exterior... A verdadeira beleza vem do interior." <br>— inspirado em 1 Pedro 3</div>
   </div>
 </div>
 
 <!-- ===================== APP ===================== -->
-<div id="app">
+<div id="app" style="display: block;">
   <div class="backdrop" id="backdrop" onclick="toggleSide(false)"></div>
   <div class="shell">
     <!-- SIDEBAR -->
     <aside class="side" id="side">
       <div class="side-head">
-        <div id="sideSeal"></div>
+        <div id="sideSeal"><span class="seal"><svg width="38" height="38" viewBox="0 0 200 200" fill="none">
+    <defs><path id="tp38" d="M 100,100 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0"></path></defs>
+    <circle cx="100" cy="100" r="92" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1.5"></circle>
+    <circle cx="100" cy="100" r="80" fill="none" stroke="#fff" stroke-width="2.4"></circle>
+    <text font-family="Poppins,sans-serif" font-size="12.5" letter-spacing="3.4" fill="#fff" font-weight="500">
+      <textpath href="#tp38" startOffset="4%">BELA AOS OLHOS DE DEUS · ESPAÇO DE BELEZA</textpath>
+    </text>
+    <path d="M74 66 C60 74 60 96 78 104 C92 110 100 96 96 84 C93 74 82 74 80 84 C79 92 88 96 94 90" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"></path>
+    <path d="M104 70 C116 84 118 112 108 138 C104 148 98 150 100 140 C104 118 104 92 104 70 Z" fill="#fff" fill-opacity=".92"></path>
+    <path d="M104 78 C112 90 113 116 106 134" fill="none" stroke="#7a1540" stroke-width="1.6" stroke-linecap="round"></path>
+  </svg></span></div>
         <div class="txt">
           <b>Bela aos Olhos</b>
           <span>de Deus</span>
         </div>
       </div>
-      <nav class="nav" id="nav"></nav>
+      <nav class="nav" id="nav"><div class="nav-group">Operação</div><a data-nav="dashboard" onclick="go(&#39;dashboard&#39;)" class="active"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"></path></svg><span>Painel</span></a><a data-nav="agenda" onclick="go(&#39;agenda&#39;)" class=""><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Agenda</span></a><a data-nav="comandas" onclick="go(&#39;comandas&#39;)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6l1 3h4v2H4V5h4z"></path><rect x="4" y="7" width="16" height="14" rx="2"></rect><path d="M9 12h6M9 16h6"></path></svg><span>Comandas</span></a><div class="nav-group">Cadastros</div><a data-nav="clientes" onclick="go(&#39;clientes&#39;)" class=""><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>Clientes</span></a><a data-nav="servicos" onclick="go(&#39;servicos&#39;)" class=""><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg><span>Serviços</span></a><a data-nav="equipe" onclick="go(&#39;equipe&#39;)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"></path></svg><span>Equipe</span></a><div class="nav-group">Gestão</div><a data-nav="financeiro" onclick="go(&#39;financeiro&#39;)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg><span>Financeiro</span></a><a data-nav="relatorios" onclick="go(&#39;relatorios&#39;)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><rect x="7" y="12" width="3" height="6"></rect><rect x="12" y="8" width="3" height="10"></rect><rect x="17" y="5" width="3" height="13"></rect></svg><span>Relatórios</span></a><a data-nav="config" onclick="go(&#39;config&#39;)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Configurações</span></a></nav>
       <div class="side-foot">
         <div class="user-chip">
           <div class="avatar" id="userAv">R</div>
@@ -365,7 +387,7 @@ tbody tr:last-child td{border-bottom:none}
             <span>Administradora</span>
           </div>
           <button title="Sair" onclick="logout()">
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           </button>
         </div>
       </div>
@@ -375,20 +397,97 @@ tbody tr:last-child td{border-bottom:none}
     <div class="main">
       <header class="topbar">
         <button class="icon-btn burger" onclick="toggleSide(true)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
-        <h2 id="pageTitle">Painel</h2>
+        <h2 id="pageTitle">Painel<small>Visão geral do dia</small></h2>
         <div class="spacer"></div>
         <div class="search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input id="globalSearch" placeholder="Buscar cliente..." autocomplete="off">
         </div>
         <button class="btn btn-primary btn-sm" onclick="openCommand()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           Nova comanda
         </button>
       </header>
-      <main class="view" id="view"></main>
+      <main class="view" id="view" style="">
+  <div class="card card-pad" style="margin-bottom:20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:linear-gradient(120deg,var(--surface),rgba(165,36,104,.10))">
+    <div style="flex:1;min-width:220px">
+      <div style="font-family:var(--ff-disp);font-size:22px;font-weight:600">Bom dia, Recepção 🌸</div>
+      <div class="muted mt4">Hoje é Qua, 09/09/2026. Sem atendimentos pendentes para hoje.</div>
+    </div>
+    <div style="font-family:var(--ff-disp);font-style:italic;color:var(--rose);max-width:280px;text-align:right;font-size:13.5px;line-height:1.5;border-left:1px solid var(--line);padding-left:18px">"Toda mulher é bela aos olhos de Deus." ✨</div>
+  </div>
+
+  <div class="stats" style="margin-bottom:20px">
+    
+    <div class="stat">
+      <div class="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+      <div class="lbl">Faturamento de hoje</div>
+      <div class="val mono-num">R$&nbsp;0,00</div>
+      <div class="delta up"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg> 0% vs ontem</div>
+    </div>
+    
+    <div class="stat">
+      <div class="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+      <div class="lbl">Agendamentos de hoje</div>
+      <div class="val mono-num">0</div>
+      <div class="delta" style="color:var(--muted-2)">no mês</div>
+    </div>
+    
+    <div class="stat">
+      <div class="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 0 0 4v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4a2 2 0 0 0 0-4z"></path></svg></div>
+      <div class="lbl">Ticket médio do mês</div>
+      <div class="val mono-num">R$&nbsp;0,00</div>
+      <div class="delta" style="color:var(--muted-2)">no mês</div>
+    </div>
+    
+    <div class="stat">
+      <div class="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+      <div class="lbl">Clientes cadastradas</div>
+      <div class="val mono-num">16</div>
+      <div class="delta" style="color:var(--muted-2)">no mês</div>
+    </div>
+  </div>
+
+  <div class="grid split-2" style="grid-template-columns:1.5fr 1fr" id="dashGrid">
+    <div class="card card-pad">
+      <div class="section-title"><h3>Próximos atendimentos</h3><span class="link" onclick="go(&#39;agenda&#39;)">Ver agenda →</span></div>
+      <div class="empty"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><b>Nenhum atendimento pendente</b><div>Todos os horários de hoje já foram concluídos.</div></div>
+    </div>
+    <div class="card card-pad">
+      <div class="section-title"><h3>Faturamento · 7 dias</h3></div>
+      <div class="bars">
+        <div class="bar-col"><div class="bar dim" style="height:3px" title="R$ 0,00"></div><div class="bx">Q</div></div><div class="bar-col"><div class="bar dim" style="height:3px" title="R$ 0,00"></div><div class="bx">S</div></div><div class="bar-col"><div class="bar dim" style="height:3px" title="R$ 0,00"></div><div class="bx">S</div></div><div class="bar-col"><div class="bar dim" style="height:3px" title="R$ 0,00"></div><div class="bx">D</div></div><div class="bar-col"><div class="bar dim" style="height:3px" title="R$ 0,00"></div><div class="bx">S</div></div><div class="bar-col"><div class="bar dim" style="height:3px" title="R$ 0,00"></div><div class="bx">T</div></div><div class="bar-col"><div class="bar " style="height:3px" title="R$ 0,00"></div><div class="bx">Q</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="kpi-inline">
+        <div class="k"><b>R$&nbsp;0</b><span>no mês</span></div>
+        <div class="k"><b>0</b><span>comandas</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid split-2" style="grid-template-columns:1fr 1fr;margin-top:20px" id="dashGrid2">
+    <div class="card card-pad">
+      <div class="section-title"><h3>Serviços mais realizados</h3><span class="muted" style="font-size:11px">30 dias</span></div>
+      <div class="empty"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg><b>Sem dados ainda</b><div>Feche algumas comandas para ver o ranking.</div></div>
+    </div>
+    <div class="card card-pad">
+      <div class="section-title"><h3>Aniversariantes de Setembro</h3><span class="rose"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg></span></div>
+      
+        <div class="li">
+          <div class="avatar" style="background:linear-gradient(135deg,var(--champagne-dim),var(--wine))">FD</div>
+          <div class="li-main"><b>Fernanda Diniz</b><div class="li-sub">(98) 99255-8823</div></div>
+          <span class="badge mut">09/09</span>
+        </div>
+        <div class="li">
+          <div class="avatar" style="background:linear-gradient(135deg,var(--champagne-dim),var(--wine))">GT</div>
+          <div class="li-main"><b>Gabriela Torres</b><div class="li-sub">(98) 99244-9981</div></div>
+          <span class="badge mut">18/09</span>
+        </div>
+    </div>
+  </div></main>
     </div>
   </div>
 </div>
@@ -548,33 +647,68 @@ function sealSVG(size){
   </svg></span>`;
 }
 
+/* ---------- CATÁLOGO OFICIAL DE SERVIÇOS (Bela aos Olhos de Deus) ----------
+   Fonte única usada tanto na primeira carga (seed) quanto no botão
+   "Importar catálogo oficial" da tela de Serviços.
+   Formato: [nome, categoria, duração(min), preço(R$), comissão(%)] */
+const CATALOGO_OFICIAL = [
+  // ----- Cabelo -----
+  ['Cabelo – Blindagem (curto)','Cabelo',45,180,40],
+  ['Cabelo – Blindagem (médio)','Cabelo',45,220,40],
+  ['Cabelo – Blindagem (Longo)','Cabelo',45,280,40],
+  ['Cabelo – Blindagem (Extra longo)','Cabelo',45,300,40],
+  ['Cabelo – Babyliss','Cabelo',45,25,40],
+  ['Cabelo – Escova modelada (curto)','Cabelo',45,40,40],
+  ['Cabelo – Escova modelada (médio)','Cabelo',45,60,40],
+  ['Cabelo – Só corte em camada','Cabelo',45,90,40],
+  ['Cabelo – Aparar / alinhar (curto)','Cabelo',45,40,40],
+  // ----- Cílios e Sobrancelhas -----
+  ['Cílios – Volume brasileiro','Cílios e Sobrancelhas',45,90,40],
+  ['Cílios – Mega brasileiro','Cílios e Sobrancelhas',45,120,40],
+  ['Cílios – Volume egípcio','Cílios e Sobrancelhas',45,100,40],
+  ['Cílios – Volume glamour','Cílios e Sobrancelhas',45,150,40],
+  ['Cílios – Volume Fox','Cílios e Sobrancelhas',45,135,40],
+  ['Design de sobrancelhas','Cílios e Sobrancelhas',45,25,40],
+  ['Design com henna','Cílios e Sobrancelhas',45,45,40],
+  // ----- Coloração e Química -----
+  ['Coloração + tratamento pós-coloração (curto)','Coloração e Química',45,190,40],
+  ['Coloração + tratamento pós-coloração (médio)','Coloração e Química',45,240,40],
+  ['Coloração + tratamento pós-coloração (longo)','Coloração e Química',45,260,40],
+  ['Coloração + tratamento pós-coloração (extra)','Coloração e Química',45,380,40],
+  ['Retoque de raiz (curto)','Coloração e Química',45,130,40],
+  ['Retoque de raiz (médio)','Coloração e Química',45,160,40],
+  ['Retoque de raiz (longo)','Coloração e Química',45,180,40],
+  ['Retoque de raiz (extra)','Coloração e Química',45,210,40],
+  ['Coloração – 1 Caixa','Coloração e Química',45,150,40],
+  ['Coloração – 2 Caixas','Coloração e Química',45,200,40],
+  ['Coloração – 3 Caixas','Coloração e Química',45,230,40],
+  ['Coloração – 4 Caixas','Coloração e Química',45,320,40],
+  ['Luzes + tratamento + pós-coloração (curto)','Coloração e Química',45,550,40],
+  ['Luzes + tratamento + pós-coloração (médio)','Coloração e Química',45,600,40],
+  ['Luzes + tratamento + pós-coloração (longo)','Coloração e Química',45,700,40],
+  ['Luzes + tratamento + pós-coloração (extra)','Coloração e Química',45,750,40],
+  ['Matizador RP (curto)','Coloração e Química',45,100,40]
+];
+
 /* ---------- (4) DADOS DE DEMONSTRAÇÃO ---------- */
 function seedIfEmpty(){
   if(DB.all('services').length || DB.all('clients').length) return;
 
   const settings = { id:'main', nome:'Bela aos Olhos de Deus', slogan:'Espaço de Beleza',
     telefone:'(98) 98888-0000', endereco:'São Luís · MA', abertura:'08:00', fechamento:'19:00',
-    pagamentos:['Pix','Dinheiro','Cartão de Débito','Cartão de Crédito'] };
+    pagamentos:['Pix','Dinheiro','Cartão de Débito','Cartão de Crédito'],
+    senha:'1234', recCode:gerarCodigoRec() };
 
-  const services = [
-    ['Corte Feminino','Cabelo',45,60,40],['Escova','Cabelo',40,50,40],['Escova Modelada','Cabelo',50,70,40],
-    ['Hidratação','Cabelo',50,80,35],['Coloração','Cabelo',90,150,30],['Luzes / Mechas','Cabelo',150,320,30],
-    ['Progressiva','Cabelo',120,260,30],['Botox Capilar','Cabelo',90,180,30],
-    ['Manicure','Mãos e Pés',40,40,50],['Pedicure','Mãos e Pés',45,45,50],['Esmaltação em Gel','Mãos e Pés',60,90,50],
-    ['Alongamento de Unhas','Mãos e Pés',90,150,45],
-    ['Design de Sobrancelha','Rosto',30,45,55],['Design com Henna','Rosto',35,60,55],['Micropigmentação','Rosto',90,350,35],
-    ['Limpeza de Pele','Estética',60,120,40],['Maquiagem Social','Estética',60,150,45],['Alongamento de Cílios','Estética',90,180,45],
-    ['Depilação Buço','Estética',15,25,55],['Depilação Axila','Estética',20,35,55],['Massagem Relaxante','Estética',60,120,40]
-  ].map(([nome,categoria,duracao,preco,comissao])=>({id:uid(),nome,categoria,duracao,preco,comissao}));
+  const services = CATALOGO_OFICIAL.map(([nome,categoria,duracao,preco,comissao])=>({id:uid(),nome,categoria,duracao,preco,comissao}));
 
-  const svc = n => services.find(s=>s.nome===n).id;
+  const svc = n => (services.find(s=>s.nome===n)||services[0]).id;
 
   const professionals = [
-    ['Ana Paula Ribeiro','Cabeleireira',['Cabelo'],40,'#c8408a'],
-    ['Juliana Mendes','Manicure & Pedicure',['Mãos e Pés'],50,'#d98cb3'],
-    ['Bruna Carvalho','Esteticista',['Estética'],45,'#e6a94f'],
-    ['Camila Nunes','Designer de Sobrancelha',['Rosto'],55,'#7fb0e6'],
-    ['Fernanda Lopes','Maquiadora & Cílios',['Estética'],45,'#54bd82']
+    ['Ana Paula Ribeiro','Cabeleireira',['Cabelo','Coloração e Química'],40,'#c8408a'],
+    ['Juliana Mendes','Colorista',['Coloração e Química'],50,'#d98cb3'],
+    ['Bruna Carvalho','Cabeleireira',['Cabelo'],45,'#e6a94f'],
+    ['Camila Nunes','Designer de Sobrancelha',['Cílios e Sobrancelhas'],55,'#7fb0e6'],
+    ['Fernanda Lopes','Lash Designer',['Cílios e Sobrancelhas'],45,'#54bd82']
   ].map(([nome,funcao,especialidades,comissao,cor])=>({id:uid(),nome,funcao,especialidades,comissao,cor,ativo:true}));
   const prof = n => professionals.find(p=>p.nome.startsWith(n)).id;
 
@@ -596,26 +730,26 @@ function seedIfEmpty(){
   // Agendamentos de HOJE
   const hoje = todayISO();
   const appointments = [
-    [cli(0),prof('Ana'),svc('Corte Feminino'),'09:00','agendado'],
-    [cli(1),prof('Juliana'),svc('Esmaltação em Gel'),'09:30','agendado'],
-    [cli(2),prof('Camila'),svc('Design de Sobrancelha'),'10:00','concluido'],
-    [cli(3),prof('Ana'),svc('Coloração'),'10:00','agendado'],
-    [cli(4),prof('Bruna'),svc('Limpeza de Pele'),'11:00','agendado'],
-    [cli(5),prof('Fernanda'),svc('Alongamento de Cílios'),'11:30','agendado'],
-    [cli(6),prof('Juliana'),svc('Manicure'),'13:30','agendado'],
-    [cli(7),prof('Ana'),svc('Progressiva'),'14:00','agendado'],
-    [cli(8),prof('Camila'),svc('Design com Henna'),'15:00','agendado'],
-    [cli(9),prof('Fernanda'),svc('Maquiagem Social'),'16:00','agendado'],
-    [cli(10),prof('Bruna'),svc('Massagem Relaxante'),'16:30','agendado'],
-    [cli(11),prof('Ana'),svc('Escova Modelada'),'17:30','agendado']
+    [cli(0),prof('Bruna'),svc('Cabelo – Escova modelada (curto)'),'09:00','agendado'],
+    [cli(1),prof('Fernanda'),svc('Cílios – Volume brasileiro'),'09:30','agendado'],
+    [cli(2),prof('Camila'),svc('Design de sobrancelhas'),'10:00','concluido'],
+    [cli(3),prof('Ana'),svc('Coloração + tratamento pós-coloração (médio)'),'10:00','agendado'],
+    [cli(4),prof('Juliana'),svc('Retoque de raiz (curto)'),'11:00','agendado'],
+    [cli(5),prof('Fernanda'),svc('Cílios – Mega brasileiro'),'11:30','agendado'],
+    [cli(6),prof('Bruna'),svc('Cabelo – Babyliss'),'13:30','agendado'],
+    [cli(7),prof('Ana'),svc('Luzes + tratamento + pós-coloração (curto)'),'14:00','agendado'],
+    [cli(8),prof('Camila'),svc('Design com henna'),'15:00','agendado'],
+    [cli(9),prof('Fernanda'),svc('Cílios – Volume glamour'),'16:00','agendado'],
+    [cli(10),prof('Bruna'),svc('Cabelo – Só corte em camada'),'16:30','agendado'],
+    [cli(11),prof('Ana'),svc('Cabelo – Blindagem (curto)'),'17:30','agendado']
   ].map(([clientId,professionalId,serviceId,hora,status])=>({
     id:uid(), clientId, professionalId, serviceId, data:hoje, hora, status, obs:''
   }));
   // alguns nos próximos dias
   appointments.push(
-    {id:uid(),clientId:cli(12),professionalId:prof('Ana'),serviceId:svc('Luzes / Mechas'),data:addDaysISO(hoje,1),hora:'10:00',status:'agendado',obs:''},
-    {id:uid(),clientId:cli(13),professionalId:prof('Camila'),serviceId:svc('Micropigmentação'),data:addDaysISO(hoje,1),hora:'14:00',status:'agendado',obs:''},
-    {id:uid(),clientId:cli(14),professionalId:prof('Juliana'),serviceId:svc('Pedicure'),data:addDaysISO(hoje,2),hora:'09:30',status:'agendado',obs:''}
+    {id:uid(),clientId:cli(12),professionalId:prof('Ana'),serviceId:svc('Coloração – 2 Caixas'),data:addDaysISO(hoje,1),hora:'10:00',status:'agendado',obs:''},
+    {id:uid(),clientId:cli(13),professionalId:prof('Camila'),serviceId:svc('Cílios – Volume Fox'),data:addDaysISO(hoje,1),hora:'14:00',status:'agendado',obs:''},
+    {id:uid(),clientId:cli(14),professionalId:prof('Juliana'),serviceId:svc('Retoque de raiz (médio)'),data:addDaysISO(hoje,2),hora:'09:30',status:'agendado',obs:''}
   );
 
   // Histórico: comandas fechadas + transações dos últimos 22 dias (para relatórios)
@@ -687,6 +821,7 @@ const NAV = [
 ];
 let current = 'dashboard';
 let agendaDate = null; // definido no boot
+let dashMonth = null;  // filtro de mês do Painel: null = mês atual; senão 'YYYY-MM'
 
 function buildNav(){
   const nav = document.getElementById('nav');
@@ -744,12 +879,53 @@ function toggleSide(open){
 }
 
 /* ---------- LOGIN ---------- */
+function gerarCodigoRec(){ const s='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let c=''; for(let i=0;i<6;i++) c+=s[Math.floor(Math.random()*s.length)]; return 'BELA-'+c; }
+function senhaConfigurada(){ const st=DB.get('settings','main'); return (st && st.senha!=null && st.senha!=='') ? String(st.senha) : '1234'; }
+function codigoRecAtual(){ const st=DB.get('settings','main'); return (st && st.recCode) ? String(st.recCode) : ''; }
+
 document.getElementById('loginForm').addEventListener('submit', e=>{
   e.preventDefault();
   const u = document.getElementById('lgUser').value.trim() || 'recepcao';
+  const pass = document.getElementById('lgPass').value;
+  if(String(pass) !== senhaConfigurada()){
+    toast('Senha incorreta','err','Confira a senha e tente novamente.');
+    const card=document.querySelector('.login-card');
+    if(card){ card.style.animation='none'; void card.offsetWidth; card.style.animation='shake .4s'; }
+    return;
+  }
   sessionStorage.setItem('belaUser', u);
   enterApp(u);
 });
+
+/* ---------- RECUPERAR SENHA (código de recuperação) ---------- */
+function abrirRecuperarSenha(){
+  openModal(`
+    <div class="modal-head"><h3>Recuperar senha</h3><button class="x" onclick="closeModal()">${icon('x',18)}</button></div>
+    <div class="modal-body">
+      <p class="muted" style="line-height:1.6;font-size:13px">Digite o <b>código de recuperação</b> do salão (aquele que fica guardado em Configurações → Senha e segurança) e defina uma senha nova.</p>
+      <div class="form-row" style="margin-top:14px"><div class="inp"><label>Código de recuperação</label><input id="recCode" placeholder="Ex: BELA-XXXXXX" autocomplete="off"></div></div>
+      <div class="form-row c2">
+        <div class="inp"><label>Nova senha</label><input id="recNova" type="password" autocomplete="new-password"></div>
+        <div class="inp"><label>Confirmar</label><input id="recNova2" type="password" autocomplete="new-password"></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="aplicarRecuperarSenha()">${icon('check',16)} Redefinir senha</button></div>`);
+}
+async function aplicarRecuperarSenha(){
+  const code=(document.getElementById('recCode').value||'').trim().toUpperCase();
+  const nova=document.getElementById('recNova').value, nova2=document.getElementById('recNova2').value;
+  const atual=codigoRecAtual().toUpperCase();
+  if(!atual){ toast('Recuperação não configurada','err','Peça para quem tem acesso definir um código em Configurações.'); return; }
+  if(code!==atual){ toast('Código de recuperação inválido','err'); return; }
+  if(!nova || nova.length<4){ toast('A nova senha precisa ter ao menos 4 caracteres','err'); return; }
+  if(nova!==nova2){ toast('As senhas não conferem','err'); return; }
+  const st=DB.get('settings','main')||{id:'main'};
+  st.senha=nova;
+  await DB.put('settings',st);
+  closeModal();
+  toast('Senha redefinida ✓','ok','Já pode entrar com a nova senha.');
+}
 function enterApp(u){
   document.getElementById('login').style.display='none';
   document.getElementById('app').style.display='block';
@@ -780,6 +956,7 @@ async function boot(){
 
   const saved = sessionStorage.getItem('belaUser');
   if(saved){ enterApp(saved); } // auto-entra se já logou nesta sessão
+  else { document.getElementById('login').style.display='grid'; document.getElementById('app').style.display='none'; }
 }
 
 /* ============================================================
@@ -791,11 +968,27 @@ function faturamentoPeriodo(a,b){ return ordersBetween(a,b).reduce((s,o)=>s+o.to
 function mesRange(){ const d=new Date(); const a=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`; return [a,todayISO()]; }
 function ticketMedio(a,b){ const os=ordersBetween(a,b); return os.length? os.reduce((s,o)=>s+o.total,0)/os.length : 0; }
 function apptsDia(iso){ return DB.all('appointments').filter(x=>x.data===iso).sort((a,b)=>a.hora.localeCompare(b.hora)); }
-function aniversariantesMes(){
-  const m = String(new Date().getMonth()+1).padStart(2,'0');
+function aniversariantesMes(mm){
+  const m = String(mm!=null?mm:(new Date().getMonth()+1)).padStart(2,'0');
   return DB.all('clients').filter(c=>c.nascimento && c.nascimento.slice(5,7)===m)
     .sort((a,b)=>a.nascimento.slice(8,10)-b.nascimento.slice(8,10));
 }
+/* ---- filtro de mês do Painel ---- */
+function currentMonthKey(){ return todayISO().slice(0,7); }               // 'YYYY-MM'
+function monthRangeKey(key){                                             // -> [primeiroDia, últimoDia]
+  const [y,m] = key.split('-').map(Number);
+  const last = new Date(y, m, 0).getDate();
+  return [`${key}-01`, `${key}-${String(last).padStart(2,'0')}`];
+}
+function monthLabel(key){ return `${monthName(+key.slice(5,7)-1)} ${key.slice(0,4)}`; }
+function dashMonthOptions(){
+  const set = new Set([currentMonthKey()]);
+  DB.all('orders').forEach(o=>{ if(o.data) set.add(o.data.slice(0,7)); });
+  DB.all('appointments').forEach(a=>{ if(a.data) set.add(a.data.slice(0,7)); });
+  DB.all('transactions').forEach(t=>{ if(t.data) set.add(t.data.slice(0,7)); });
+  return [...set].sort().reverse();
+}
+function setDashMonth(v){ dashMonth = v || null; renderView('dashboard'); }
 function servicosMaisFeitos(a,b,limit=6){
   const cont={};
   ordersBetween(a,b).forEach(o=>o.itens.forEach(it=>{ if(it.tipo==='servico'){ cont[it.nome]=(cont[it.nome]||{q:0,v:0}); cont[it.nome].q++; cont[it.nome].v+=it.valor; }}));
@@ -811,15 +1004,25 @@ function clientGasto(clientId){ return clientHist(clientId).reduce((s,o)=>s+o.to
    ============================================================ */
 function viewDashboard(){
   const hoje = todayISO();
-  const [ma,mb] = mesRange();
+  // ---- filtro de mês (null = mês atual) ----
+  const selM = dashMonth || currentMonthKey();
+  const isCurrent = (selM === currentMonthKey());
+  const [mStart, mEndFull] = monthRangeKey(selM);
+  const ma = mStart, mb = isCurrent ? hoje : mEndFull;
+
   const fatHoje = faturamentoDia(hoje);
   const fatOntem = faturamentoDia(addDaysISO(hoje,-1));
-  const appts = apptsDia(hoje);
-  const pend = appts.filter(a=>a.status==='agendado').length;
-  const tkt = ticketMedio(ma,mb);
-  const clientesAtivos = DB.all('clients').length;
-  const fatMes = faturamentoPeriodo(ma,mb);
   const deltaHoje = fatOntem>0 ? Math.round((fatHoje-fatOntem)/fatOntem*100) : 0;
+
+  const apptsHoje = apptsDia(hoje);
+  const pend = apptsHoje.filter(a=>a.status==='agendado').length;
+
+  // valores do mês selecionado
+  const fatMes = faturamentoPeriodo(ma,mb);
+  const tkt = ticketMedio(ma,mb);
+  const comandasMes = ordersBetween(ma,mb).length;
+  const apptsMes = DB.all('appointments').filter(a=>a.data && a.data>=ma && a.data<=mb).length;
+  const clientesAtivos = DB.all('clients').length;
 
   const stat=(ico,lbl,val,delta)=>`
     <div class="stat">
@@ -829,9 +1032,8 @@ function viewDashboard(){
       ${delta!=null?`<div class="delta ${delta>=0?'up':'dn'}">${icon(delta>=0?'arrowUp':'arrowDown',13)} ${Math.abs(delta)}% vs ontem</div>`:'<div class="delta" style="color:var(--muted-2)">no mês</div>'}
     </div>`;
 
-  // próximos atendimentos
-  const agora = new Date().toTimeString().slice(0,5);
-  const proximos = appts.filter(a=>a.status==='agendado').slice(0,6);
+  // próximos atendimentos (sempre os de hoje — operação do dia)
+  const proximos = apptsHoje.filter(a=>a.status==='agendado').slice(0,6);
   const linhaAppt = a=>{
     const c=DB.get('clients',a.clientId), p=DB.get('professionals',a.professionalId), s=DB.get('services',a.serviceId);
     return `<div class="li">
@@ -841,29 +1043,51 @@ function viewDashboard(){
     </div>`;
   };
 
-  const aniv = aniversariantesMes().slice(0,5);
-  const topServ = servicosMaisFeitos(addDaysISO(hoje,-30),hoje,5);
+  const anivMes = +selM.slice(5,7);
+  const aniv = aniversariantesMes(anivMes).slice(0,5);
+  const topServ = isCurrent ? servicosMaisFeitos(addDaysISO(hoje,-30),hoje,5) : servicosMaisFeitos(ma,mb,5);
   const maxQ = topServ.length? topServ[0].q : 1;
 
-  // faturamento últimos 7 dias
-  const dias7 = Array.from({length:7},(_,i)=>addDaysISO(hoje,-6+i));
+  // faturamento dos 7 dias que terminam em mb (para o mês atual, termina hoje)
+  const dias7 = Array.from({length:7},(_,i)=>addDaysISO(mb,-6+i));
   const vals7 = dias7.map(faturamentoDia);
   const max7 = Math.max(...vals7,1);
+
+  // opções do seletor de mês
+  const opcoesMes = dashMonthOptions();
+  const selectMes = `
+    <select id="dashMonthSel" onchange="setDashMonth(this.value)"
+      style="padding:9px 12px;border-radius:11px;background:rgba(23,8,16,.55);border:1px solid var(--line);color:var(--text);font-weight:500;font-size:13px;min-width:190px;cursor:pointer">
+      <option value="" ${isCurrent?'selected':''}>Mês atual · ${monthLabel(currentMonthKey())}</option>
+      ${opcoesMes.filter(k=>k!==currentMonthKey()).map(k=>`<option value="${k}" ${(!isCurrent&&k===selM)?'selected':''}>${monthLabel(k)}</option>`).join('')}
+    </select>`;
 
   return `
   <div class="card card-pad" style="margin-bottom:20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:linear-gradient(120deg,var(--surface),rgba(165,36,104,.10))">
     <div style="flex:1;min-width:220px">
       <div style="font-family:var(--ff-disp);font-size:22px;font-weight:600">${saudacao()}, Recepção 🌸</div>
-      <div class="muted mt4">Hoje é ${weekdayName(hoje)}, ${isoToBR(hoje)}. ${pend? `Você tem <b class="rose">${pend} atendimento${pend>1?'s':''}</b> ainda por vir.`:'Sem atendimentos pendentes para hoje.'}</div>
+      <div class="muted mt4">${isCurrent
+        ? `Hoje é ${weekdayName(hoje)}, ${isoToBR(hoje)}. ${pend? `Você tem <b class="rose">${pend} atendimento${pend>1?'s':''}</b> ainda por vir.`:'Sem atendimentos pendentes para hoje.'}`
+        : `Exibindo os valores de <b class="rose">${monthLabel(selM)}</b>.`}</div>
     </div>
-    <div style="font-family:var(--ff-disp);font-style:italic;color:var(--rose);max-width:280px;text-align:right;font-size:13.5px;line-height:1.5;border-left:1px solid var(--line);padding-left:18px">"Toda mulher é bela aos olhos de Deus." ✨</div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label for="dashMonthSel" style="font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted-2);font-weight:600">Ver valores do mês</label>
+      ${selectMes}
+    </div>
+    <div style="font-family:var(--ff-disp);font-style:italic;color:var(--rose);max-width:250px;text-align:right;font-size:13.5px;line-height:1.5;border-left:1px solid var(--line);padding-left:18px">"Toda mulher é bela aos olhos de Deus." ✨</div>
   </div>
 
   <div class="stats" style="margin-bottom:20px">
-    ${stat('money','Faturamento de hoje',money(fatHoje),deltaHoje)}
-    ${stat('agenda','Agendamentos de hoje',appts.length+'',null)}
+    ${isCurrent
+      ? stat('money','Faturamento de hoje',money(fatHoje),deltaHoje)
+      : stat('money','Faturamento do mês',money(fatMes),null)}
+    ${isCurrent
+      ? stat('agenda','Agendamentos de hoje',apptsHoje.length+'',null)
+      : stat('agenda','Atendimentos do mês',apptsMes+'',null)}
     ${stat('ticket','Ticket médio do mês',money(tkt),null)}
-    ${stat('clients','Clientes cadastradas',clientesAtivos+'',null)}
+    ${isCurrent
+      ? stat('clients','Clientes cadastradas',clientesAtivos+'',null)
+      : stat('orders','Comandas do mês',comandasMes+'',null)}
   </div>
 
   <div class="grid split-2" style="grid-template-columns:1.5fr 1fr" id="dashGrid">
@@ -872,27 +1096,27 @@ function viewDashboard(){
       ${proximos.length? proximos.map(linhaAppt).join('') : emptyBox('inbox','Nenhum atendimento pendente','Todos os horários de hoje já foram concluídos.')}
     </div>
     <div class="card card-pad">
-      <div class="section-title"><h3>Faturamento · 7 dias</h3></div>
+      <div class="section-title"><h3>Faturamento · 7 dias</h3>${isCurrent?'':`<span class="muted" style="font-size:11px">${monthLabel(selM)}</span>`}</div>
       <div class="bars">
-        ${dias7.map((d,i)=>`<div class="bar-col"><div class="bar ${d===hoje?'':'dim'}" style="height:${Math.max(vals7[i]/max7*130,3)}px" title="${money(vals7[i])}"></div><div class="bx">${weekdayName(d)[0]}</div></div>`).join('')}
+        ${dias7.map((d,i)=>`<div class="bar-col"><div class="bar ${d===mb?'':'dim'}" style="height:${Math.max(vals7[i]/max7*130,3)}px" title="${isoToBRShort(d)} · ${money(vals7[i])}"></div><div class="bx">${weekdayName(d)[0]}</div></div>`).join('')}
       </div>
       <div class="divider"></div>
       <div class="kpi-inline">
         <div class="k"><b>${money0(fatMes)}</b><span>no mês</span></div>
-        <div class="k"><b>${ordersBetween(ma,mb).length}</b><span>comandas</span></div>
+        <div class="k"><b>${comandasMes}</b><span>comandas</span></div>
       </div>
     </div>
   </div>
 
   <div class="grid split-2" style="grid-template-columns:1fr 1fr;margin-top:20px" id="dashGrid2">
     <div class="card card-pad">
-      <div class="section-title"><h3>Serviços mais realizados</h3><span class="muted" style="font-size:11px">30 dias</span></div>
+      <div class="section-title"><h3>Serviços mais realizados</h3><span class="muted" style="font-size:11px">${isCurrent?'30 dias':monthLabel(selM)}</span></div>
       ${topServ.length? topServ.map(s=>`
         <div class="hbar"><div class="hb-lbl">${esc(s.nome)}</div><div class="hb-track"><div class="hb-fill" style="width:${s.q/maxQ*100}%"></div></div><div class="hb-val">${s.q}x</div></div>
       `).join('') : emptyBox('services','Sem dados ainda','Feche algumas comandas para ver o ranking.')}
     </div>
     <div class="card card-pad">
-      <div class="section-title"><h3>Aniversariantes de ${monthName(new Date().getMonth())}</h3><span class="rose">${icon('gift',16)}</span></div>
+      <div class="section-title"><h3>Aniversariantes de ${monthName(anivMes-1)}</h3><span class="rose">${icon('gift',16)}</span></div>
       ${aniv.length? aniv.map(c=>`
         <div class="li">
           <div class="avatar" style="background:linear-gradient(135deg,var(--champagne-dim),var(--wine))">${initials(c.nome)}</div>
@@ -1203,6 +1427,7 @@ function viewServicos(){
   <div class="toolbar">
     <div class="pill-tabs">${cats.map(c=>`<button class="${c===servCat?'on':''}" onclick="setServCat('${esc(c)}')">${esc(c)}</button>`).join('')}</div>
     <div class="spacer"></div>
+    <button class="btn btn-ghost btn-sm" onclick="importarCatalogoOficial()" title="Adiciona os serviços oficiais que ainda não estão no catálogo (não apaga nem duplica)">${icon('inbox',16)} Importar catálogo oficial</button>
     <button class="btn btn-primary btn-sm" onclick="openServico()">${icon('plus',16)} Novo serviço</button>
   </div>
   <div class="card"><div class="table-wrap"><table>
@@ -1240,6 +1465,24 @@ async function saveServico(id){
   await DB.put('services',obj); closeModal(); renderView('servicos'); toast(id?'Serviço atualizado':'Serviço criado');
 }
 function delServico(id){ const s=DB.get('services',id); confirmDialog('Excluir serviço',`Remover "${s.nome}" do catálogo? Isso não afeta comandas já registradas.`, async()=>{ await DB.del('services',id); renderView('servicos'); toast('Serviço removido'); }); }
+
+/* Importa o catálogo oficial: adiciona só os serviços que ainda não existem
+   (comparando pelo nome). Nunca apaga nem duplica o que já está cadastrado.
+   Cada serviço é salvo via DB.put -> persiste no Firebase (ou localStorage). */
+function importarCatalogoOficial(){
+  const existentes = new Set(DB.all('services').map(s=>(s.nome||'').trim().toLowerCase()));
+  const faltando = CATALOGO_OFICIAL.filter(([nome])=>!existentes.has(nome.trim().toLowerCase()));
+  if(!faltando.length){ toast('Catálogo já está completo','info','Todos os serviços oficiais já estão cadastrados.'); return; }
+  confirmDialog('Importar catálogo oficial',
+    `Serão adicionados ${faltando.length} serviço${faltando.length>1?'s':''} que ainda não estão no catálogo. Os serviços que você já tem não serão alterados nem removidos. Deseja continuar?`,
+    async()=>{
+      for(const [nome,categoria,duracao,preco,comissao] of faltando){
+        await DB.put('services',{nome,categoria,duracao,preco,comissao});
+      }
+      renderView('servicos');
+      toast('Catálogo importado',`ok`,`${faltando.length} serviço${faltando.length>1?'s adicionados':' adicionado'}.`);
+    }, false);
+}
 
 /* ============================================================
    VIEW · EQUIPE
@@ -1491,15 +1734,45 @@ async function reopenCommand(){
    VIEW · FINANCEIRO
    ============================================================ */
 let finPeriod='mes';
-function periodRange(key){
+let finFrom='', finTo='';   // período personalizado (Financeiro)
+function periodRange(key, from, to){
   const hoje=todayISO();
   if(key==='hoje') return [hoje,hoje];
   if(key==='7d') return [addDaysISO(hoje,-6),hoje];
   if(key==='30d') return [addDaysISO(hoje,-29),hoje];
+  if(key==='custom' && from && to) return from<=to?[from,to]:[to,from];
+  if(typeof key==='string' && key.slice(0,2)==='m:') return monthRangeKey(key.slice(2));
   return mesRange();
 }
+/* Controles extras de período (seletor de mês + intervalo de/até),
+   usados ao lado das abas rápidas no Financeiro e nos Relatórios. */
+function periodExtraControls(scope){
+  const key = scope==='fin'?finPeriod:repPeriod;
+  const from = scope==='fin'?finFrom:repFrom;
+  const to   = scope==='fin'?finTo:repTo;
+  const isMonth = (typeof key==='string' && key.slice(0,2)==='m:');
+  const selMonth = isMonth?key.slice(2):'';
+  const isCustom = (key==='custom');
+  const meses = dashMonthOptions();
+  const setMonthFn = scope==='fin'?'setFinMonth':'setRepMonth';
+  const setCustomFn = scope==='fin'?'setFinCustom':'setRepCustom';
+  const inS = 'padding:7px 9px;border-radius:9px;background:rgba(23,8,16,.55);border:1px solid var(--line);color:var(--text);font-size:12.5px';
+  return `
+    <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <select onchange="${setMonthFn}(this.value)" title="Escolher um mês" style="${inS};font-weight:500;cursor:pointer">
+        <option value="" ${!isMonth?'selected':''}>Escolher mês…</option>
+        ${meses.map(k=>`<option value="${k}" ${(isMonth&&k===selMonth)?'selected':''}>${monthLabel(k)}</option>`).join('')}
+      </select>
+      <span style="display:inline-flex;align-items:center;gap:6px;${isCustom?'outline:1px solid var(--wine);border-radius:11px;padding:2px 6px':''}">
+        <input type="date" id="${scope}From" value="${isCustom?from:''}" title="De" style="${inS}">
+        <span class="muted" style="font-size:12px">até</span>
+        <input type="date" id="${scope}To" value="${isCustom?to:''}" title="Até" style="${inS}">
+        <button class="btn btn-ghost btn-sm" onclick="${setCustomFn}()">Aplicar</button>
+      </span>
+    </div>`;
+}
 function viewFinanceiro(){
-  const [a,b]=periodRange(finPeriod);
+  const [a,b]=periodRange(finPeriod, finFrom, finTo);
   const txs=DB.all('transactions').filter(t=>t.data>=a&&t.data<=b).sort((x,y)=>y.data.localeCompare(x.data));
   const entradas=txs.filter(t=>t.tipo==='entrada').reduce((s,t)=>s+t.valor,0);
   const saidas=txs.filter(t=>t.tipo==='saida').reduce((s,t)=>s+t.valor,0);
@@ -1523,6 +1796,7 @@ function viewFinanceiro(){
       <button class="${finPeriod==='mes'?'on':''}" onclick="setFinPeriod('mes')">Mês</button>
       <button class="${finPeriod==='30d'?'on':''}" onclick="setFinPeriod('30d')">30 dias</button>
     </div>
+    ${periodExtraControls('fin')}
     <div class="spacer"></div>
     <button class="btn btn-ghost btn-sm" onclick="openTx('saida')">${icon('arrowDown',15)} Saída</button>
     <button class="btn btn-primary btn-sm" onclick="openTx('entrada')">${icon('plus',15)} Entrada</button>
@@ -1549,6 +1823,8 @@ function viewFinanceiro(){
   </div>`;
 }
 function setFinPeriod(p){ finPeriod=p; renderView('financeiro'); }
+function setFinMonth(v){ finPeriod = v ? 'm:'+v : 'mes'; renderView('financeiro'); }
+function setFinCustom(){ const f=document.getElementById('finFrom').value, t=document.getElementById('finTo').value; if(!f||!t){ toast('Escolha as duas datas','err'); return; } finFrom=f; finTo=t; finPeriod='custom'; renderView('financeiro'); }
 function openTx(tipo){
   const settings=DB.get('settings','main');
   const cats = tipo==='entrada'?['Serviços','Produtos','Outros']:['Produtos & Insumos','Aluguel','Energia & Água','Salários','Marketing','Outros'];
@@ -1581,8 +1857,9 @@ function delTx(id){ confirmDialog('Excluir movimentação','Remover esta movimen
    VIEW · RELATÓRIOS
    ============================================================ */
 let repPeriod='30d';
+let repFrom='', repTo='';   // período personalizado (Relatórios)
 function viewRelatorios(){
-  const [a,b]=periodRange(repPeriod);
+  const [a,b]=periodRange(repPeriod, repFrom, repTo);
   const os=ordersBetween(a,b);
   const fat=os.reduce((s,o)=>s+o.total,0);
   const nDias=daysBetween(a,b)+1;
@@ -1603,6 +1880,7 @@ function viewRelatorios(){
       <button class="${repPeriod==='mes'?'on':''}" onclick="setRepPeriod('mes')">Este mês</button>
       <button class="${repPeriod==='30d'?'on':''}" onclick="setRepPeriod('30d')">30 dias</button>
     </div>
+    ${periodExtraControls('rep')}
     <div class="spacer"></div>
     <div class="kpi-inline">
       <div class="k"><b class="mono-num">${money0(fat)}</b><span>faturamento</span></div>
@@ -1646,6 +1924,8 @@ function viewRelatorios(){
   </div>`;
 }
 function setRepPeriod(p){ repPeriod=p; renderView('relatorios'); }
+function setRepMonth(v){ repPeriod = v ? 'm:'+v : 'mes'; renderView('relatorios'); }
+function setRepCustom(){ const f=document.getElementById('repFrom').value, t=document.getElementById('repTo').value; if(!f||!t){ toast('Escolha as duas datas','err'); return; } repFrom=f; repTo=t; repPeriod='custom'; renderView('relatorios'); }
 const donutColors=['#c8408a','#e6a94f','#7fb0e6','#54bd82','#d98cb3','#e6c78f'];
 function donutSVG(data){
   const entries=Object.entries(data).sort((x,y)=>y[1]-x[1]);
@@ -1691,6 +1971,24 @@ function viewConfig(){
         <p class="muted" style="line-height:1.6;font-size:12.5px;margin-top:8px">No modo demonstração tudo é salvo apenas neste navegador. Para usar em vários dispositivos e ter os dados na nuvem, preencha a configuração do <b>Firebase</b> no topo do arquivo — o sistema passa para o modo online automaticamente.</p>
       </div>
       <div class="card card-pad">
+        <div class="section-title mb0"><h3>Senha e segurança</h3></div>
+        <p class="muted mt8" style="font-size:12.5px;line-height:1.6">Senha usada para entrar no sistema. Guarde o <b>código de recuperação</b> num lugar seguro — é ele que redefine a senha se você esquecer.</p>
+        <div class="form-row c2" style="margin-top:14px">
+          <div class="inp"><label>Senha atual</label><input id="cfSenhaAtual" type="password" autocomplete="current-password" placeholder="atual (padrão: 1234)"></div>
+          <div class="inp"><label>Nova senha</label><input id="cfSenhaNova" type="password" autocomplete="new-password"></div>
+        </div>
+        <div class="form-row"><div class="inp"><label>Confirmar nova senha</label><input id="cfSenhaNova2" type="password" autocomplete="new-password"></div></div>
+        <button class="btn btn-primary btn-sm" onclick="salvarNovaSenha()">${icon('check',15)} Salvar senha</button>
+        <div class="mt16" style="border-top:1px solid var(--line);padding-top:14px">
+          <label style="font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);font-weight:500">Código de recuperação</label>
+          <div class="flex items-center gap12" style="margin-top:8px;flex-wrap:wrap">
+            <b class="rose mono-num" style="font-size:16px;letter-spacing:1px">${s.recCode?esc(s.recCode):'— não definido —'}</b>
+            <button class="btn btn-ghost btn-sm" onclick="gerarNovoCodigoRec()">${icon('star',14)} Gerar novo código</button>
+          </div>
+          <p class="muted" style="font-size:11.5px;line-height:1.6;margin-top:8px">Anote esse código. Na tela de login, o botão <b>"Esqueci a senha"</b> pede ele para criar uma senha nova.</p>
+        </div>
+      </div>
+      <div class="card card-pad">
         <div class="section-title mb0"><h3>Backup dos dados</h3></div>
         <p class="muted mt8" style="font-size:12.5px;line-height:1.6">Exporte um arquivo com clientes, comandas, agenda e financeiro — ou restaure a partir de um backup.</p>
         <div class="flex gap8 mt16" style="flex-wrap:wrap">
@@ -1729,6 +2027,22 @@ async function saveConfig(){
   s.fechamento=document.getElementById('cfFe').value;
   s.pagamentos=document.getElementById('cfPag').value.split(',').map(x=>x.trim()).filter(Boolean);
   await DB.put('settings',s); toast('Configurações salvas');
+}
+async function salvarNovaSenha(){
+  const atual=document.getElementById('cfSenhaAtual').value;
+  const nova=document.getElementById('cfSenhaNova').value, nova2=document.getElementById('cfSenhaNova2').value;
+  if(String(atual)!==senhaConfigurada()){ toast('Senha atual incorreta','err'); return; }
+  if(!nova || nova.length<4){ toast('A nova senha precisa ter ao menos 4 caracteres','err'); return; }
+  if(nova!==nova2){ toast('As senhas não conferem','err'); return; }
+  const s=DB.get('settings','main')||{id:'main'};
+  s.senha=nova;
+  if(!s.recCode) s.recCode=gerarCodigoRec();
+  await DB.put('settings',s); renderView('config'); toast('Senha atualizada ✓');
+}
+async function gerarNovoCodigoRec(){
+  const s=DB.get('settings','main')||{id:'main'};
+  s.recCode=gerarCodigoRec();
+  await DB.put('settings',s); renderView('config'); toast('Novo código gerado','ok','Anote e guarde em local seguro.');
 }
 function exportData(){
   const data={}; COLLECTIONS.forEach(c=>data[c]=DB.all(c));
@@ -1790,5 +2104,6 @@ function zerarTudo(){
    ============================================================ */
 boot();
 </script>
-</body>
-</html>
+
+
+</body></html>
