@@ -816,6 +816,7 @@ const NAV = [
   {id:'equipe', label:'Equipe', icon:'team', title:'Equipe', sub:'Profissionais e comissões'},
   {group:'Gestão'},
   {id:'financeiro', label:'Financeiro', icon:'finance', title:'Financeiro', sub:'Caixa, entradas e saídas'},
+  {id:'comissoes', label:'Comissões', icon:'money', title:'Comissões', sub:'Fechamento por profissional'},
   {id:'relatorios', label:'Relatórios', icon:'reports', title:'Relatórios', sub:'Desempenho do espaço'},
   {id:'config', label:'Configurações', icon:'settings', title:'Configurações', sub:'Dados do salão e sistema'}
 ];
@@ -844,7 +845,7 @@ function go(id){
 function renderView(id){
   const v = document.getElementById('view');
   const map = {dashboard:viewDashboard,agenda:viewAgenda,comandas:viewComandas,clientes:viewClientes,
-    servicos:viewServicos,equipe:viewEquipe,financeiro:viewFinanceiro,relatorios:viewRelatorios,config:viewConfig};
+    servicos:viewServicos,equipe:viewEquipe,financeiro:viewFinanceiro,comissoes:viewComissoes,relatorios:viewRelatorios,config:viewConfig};
   v.innerHTML = (map[id]||viewDashboard)();
   if(afterRender[id]) afterRender[id]();
 }
@@ -1609,6 +1610,13 @@ function delOrder(id,numero){
 }
 
 let _cmd=null;
+let _cmdCat=''; // categoria selecionada no seletor de "Adicionar serviço"
+function cmdServOptions(){
+  const services=DB.all('services').filter(s=>!_cmdCat||s.categoria===_cmdCat).sort((a,b)=>a.nome.localeCompare(b.nome));
+  if(!services.length) return '<option value="">— nenhum serviço nesta categoria —</option>';
+  return services.map(s=>`<option value="${s.id}">${esc(s.nome)} · ${money0(s.preco)}</option>`).join('');
+}
+function setCmdCat(cat){ _cmdCat=cat; const sel=document.getElementById('addServ'); if(sel) sel.innerHTML=cmdServOptions(); }
 function openCommand(pre={}){
   const settings=DB.get('settings','main');
   if(pre.edit){ _cmd=JSON.parse(JSON.stringify(DB.get('orders',pre.edit))); }
@@ -1617,6 +1625,8 @@ function openCommand(pre={}){
     if(pre.serviceId){ const s=DB.get('services',pre.serviceId); const p=pre.professionalId?DB.get('professionals',pre.professionalId):null;
       _cmd.itens.push({tipo:'servico',refId:s.id,nome:s.nome,profId:p?p.id:'',profNome:p?p.nome:'',valor:s.preco,comissaoPct:s.comissao}); }
   }
+  const cats0=[...new Set(DB.all('services').map(s=>s.categoria))];
+  if(!_cmdCat || !cats0.includes(_cmdCat)) _cmdCat = cats0[0]||'';
   renderCommandModal();
 }
 function renderCommandModal(){
@@ -1639,8 +1649,13 @@ function renderCommandModal(){
       ${!fechada?`
       <div class="card card-pad" style="background:var(--bg-2);padding:14px;margin-bottom:14px">
         <label style="font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block">Adicionar serviço</label>
-        <div class="form-row c3" style="margin-bottom:10px;gap:8px">
-          <div class="inp"><select id="addServ">${services.map(s=>`<option value="${s.id}">${esc(s.nome)} · ${money0(s.preco)}</option>`).join('')}</select></div>
+        <div class="form-row c2" style="margin-bottom:8px;gap:8px">
+          <div class="inp"><select id="addCat" onchange="setCmdCat(this.value)">
+            ${[...new Set(services.map(s=>s.categoria))].map(c=>`<option value="${esc(c)}" ${c===_cmdCat?'selected':''}>${esc(c)}</option>`).join('')}
+          </select></div>
+          <div class="inp"><select id="addServ">${cmdServOptions()}</select></div>
+        </div>
+        <div class="form-row c2" style="gap:8px">
           <div class="inp"><select id="addProf"><option value="">Profissional...</option>${profs.map(p=>`<option value="${p.id}">${esc(p.nome.split(' ')[0])}</option>`).join('')}</select></div>
           <button class="btn btn-soft" onclick="addCmdItem()" style="justify-content:center">${icon('plus',16)} Adicionar</button>
         </div>
@@ -1691,6 +1706,7 @@ function renderCmdItems(){
 function addCmdItem(){
   const sid=document.getElementById('addServ').value; const pid=document.getElementById('addProf').value;
   const s=DB.get('services',sid); const p=pid?DB.get('professionals',pid):null;
+  if(!s){ toast('Selecione um serviço','err'); return; }
   _cmd.itens.push({tipo:'servico',refId:s.id,nome:s.nome,profId:p?p.id:'',profNome:p?p.nome:'',valor:s.preco,comissaoPct:s.comissao});
   document.getElementById('cmdItems').innerHTML=renderCmdItems();
   syncCmdTotal();
@@ -1738,6 +1754,8 @@ let finFrom='', finTo='';   // período personalizado (Financeiro)
 function periodRange(key, from, to){
   const hoje=todayISO();
   if(key==='hoje') return [hoje,hoje];
+  if(key==='ontem'){ const y=addDaysISO(hoje,-1); return [y,y]; }
+  if(key==='2d') return [addDaysISO(hoje,-1),hoje];
   if(key==='7d') return [addDaysISO(hoje,-6),hoje];
   if(key==='30d') return [addDaysISO(hoje,-29),hoje];
   if(key==='custom' && from && to) return from<=to?[from,to]:[to,from];
@@ -1747,15 +1765,17 @@ function periodRange(key, from, to){
 /* Controles extras de período (seletor de mês + intervalo de/até),
    usados ao lado das abas rápidas no Financeiro e nos Relatórios. */
 function periodExtraControls(scope){
-  const key = scope==='fin'?finPeriod:repPeriod;
-  const from = scope==='fin'?finFrom:repFrom;
-  const to   = scope==='fin'?finTo:repTo;
+  const st = {
+    fin:{key:finPeriod,from:finFrom,to:finTo,m:'setFinMonth',c:'setFinCustom'},
+    rep:{key:repPeriod,from:repFrom,to:repTo,m:'setRepMonth',c:'setRepCustom'},
+    com:{key:comPeriod,from:comFrom,to:comTo,m:'setComMonth',c:'setComCustom'}
+  }[scope];
+  const key = st.key, from = st.from, to = st.to;
   const isMonth = (typeof key==='string' && key.slice(0,2)==='m:');
   const selMonth = isMonth?key.slice(2):'';
   const isCustom = (key==='custom');
   const meses = dashMonthOptions();
-  const setMonthFn = scope==='fin'?'setFinMonth':'setRepMonth';
-  const setCustomFn = scope==='fin'?'setFinCustom':'setRepCustom';
+  const setMonthFn = st.m, setCustomFn = st.c;
   const inS = 'padding:7px 9px;border-radius:9px;background:rgba(23,8,16,.55);border:1px solid var(--line);color:var(--text);font-size:12.5px';
   return `
     <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -1926,6 +1946,100 @@ function viewRelatorios(){
 function setRepPeriod(p){ repPeriod=p; renderView('relatorios'); }
 function setRepMonth(v){ repPeriod = v ? 'm:'+v : 'mes'; renderView('relatorios'); }
 function setRepCustom(){ const f=document.getElementById('repFrom').value, t=document.getElementById('repTo').value; if(!f||!t){ toast('Escolha as duas datas','err'); return; } repFrom=f; repTo=t; repPeriod='custom'; renderView('relatorios'); }
+
+/* ============================================================
+   COMISSÕES — fechamento por profissional, com filtro de período
+   (para pagar por dia, a cada 2 dias, por semana ou período livre)
+   ============================================================ */
+let comPeriod='7d', comFrom='', comTo='';
+function setComPeriod(p){ comPeriod=p; renderView('comissoes'); }
+function setComMonth(v){ comPeriod = v ? 'm:'+v : 'mes'; renderView('comissoes'); }
+function setComCustom(){ const f=document.getElementById('comFrom').value, t=document.getElementById('comTo').value; if(!f||!t){ toast('Escolha as duas datas','err'); return; } comFrom=f; comTo=t; comPeriod='custom'; renderView('comissoes'); }
+function periodLabelHumano(key,a,b){
+  if(key==='hoje') return 'hoje';
+  if(key==='ontem') return 'ontem';
+  if(key==='2d') return 'últimos 2 dias';
+  if(key==='7d') return 'últimos 7 dias';
+  if(key==='30d') return 'últimos 30 dias';
+  if(typeof key==='string' && key.slice(0,2)==='m:') return monthLabel(key.slice(2));
+  if(key==='custom') return isoToBRShort(a)+' a '+isoToBRShort(b);
+  return 'este mês';
+}
+function viewComissoes(){
+  const [a,b]=periodRange(comPeriod, comFrom, comTo);
+  const os=ordersBetween(a,b);
+  // agrupa cada item de serviço por profissional
+  const grupos={};
+  os.forEach(o=>{
+    (o.itens||[]).forEach(it=>{
+      if(it.tipo && it.tipo!=='servico') return;
+      const pid=it.profId||'__sem__';
+      if(!grupos[pid]) grupos[pid]={ pid, itens:[], fat:0, com:0 };
+      const valor=+it.valor||0, pct=+it.comissaoPct||0, com=valor*pct/100;
+      grupos[pid].itens.push({ data:o.data, numero:o.numero, cliente:(DB.get('clients',o.clientId)||{}).nome||'—', nome:it.nome, valor, pct, com });
+      grupos[pid].fat+=valor; grupos[pid].com+=com;
+    });
+  });
+  const lista=Object.values(grupos).map(g=>{
+    const p=g.pid==='__sem__'?null:DB.get('professionals',g.pid);
+    return {...g, prof:p, nome:p?p.nome:'Sem profissional definido', cor:p?p.cor:'#8a5a70'};
+  }).sort((x,y)=>y.com-x.com);
+  const totalCom=lista.reduce((s,g)=>s+g.com,0);
+  const totalFat=lista.reduce((s,g)=>s+g.fat,0);
+  const totalAt=lista.reduce((s,g)=>s+g.itens.length,0);
+  const rotulo=periodLabelHumano(comPeriod,a,b);
+
+  const cards = lista.length ? lista.map(g=>{
+    const itensOrd=g.itens.slice().sort((x,y)=>x.data.localeCompare(y.data)||(''+x.numero).localeCompare(''+y.numero));
+    return `
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-pad" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line-soft)">
+        <div class="avatar" style="width:42px;height:42px;background:${g.cor}">${initials(g.nome)}</div>
+        <div style="flex:1;min-width:150px">
+          <b style="font-size:15px">${esc(g.nome)}</b>
+          <div class="li-sub">${g.itens.length} serviço${g.itens.length>1?'s':''} · faturou ${money(g.fat)}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="li-sub">Comissão a pagar</div>
+          <b class="rose mono-num" style="font-size:23px;font-family:var(--ff-disp)">${money(g.com)}</b>
+        </div>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Data</th><th>Cliente</th><th>Serviço</th><th class="tar">Valor</th><th class="tar">%</th><th class="tar">Comissão</th></tr></thead>
+        <tbody>${itensOrd.map(it=>`<tr>
+          <td class="muted">${isoToBRShort(it.data)}</td>
+          <td>${esc(it.cliente)}</td>
+          <td>${esc(it.nome)}</td>
+          <td class="tar mono-num">${money(it.valor)}</td>
+          <td class="tar muted">${it.pct}%</td>
+          <td class="tar mono-num rose fw6">${money(it.com)}</td>
+        </tr>`).join('')}</tbody>
+        <tfoot><tr>
+          <td colspan="5" class="tar fw6" style="border-top:2px solid var(--line)">Total a pagar para ${esc(g.nome.split(' ')[0])}</td>
+          <td class="tar mono-num rose fw7" style="border-top:2px solid var(--line);font-size:15px">${money(g.com)}</td>
+        </tr></tfoot>
+      </table></div>
+    </div>`;
+  }).join('') : emptyBox('money','Nenhum serviço no período','Escolha outro período acima, ou registre comandas com o profissional definido em cada serviço.');
+
+  return `
+  <div class="toolbar">
+    <div class="pill-tabs">
+      <button class="${comPeriod==='hoje'?'on':''}" onclick="setComPeriod('hoje')">Hoje</button>
+      <button class="${comPeriod==='ontem'?'on':''}" onclick="setComPeriod('ontem')">Ontem</button>
+      <button class="${comPeriod==='2d'?'on':''}" onclick="setComPeriod('2d')">2 dias</button>
+      <button class="${comPeriod==='7d'?'on':''}" onclick="setComPeriod('7d')">Semana</button>
+    </div>
+    ${periodExtraControls('com')}
+  </div>
+  <div class="stats" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+    <div class="stat"><div class="ico">${icon('money')}</div><div class="lbl">Total a pagar · ${esc(rotulo)}</div><div class="val mono-num rose">${money(totalCom)}</div></div>
+    <div class="stat"><div class="ico">${icon('finance')}</div><div class="lbl">Faturamento no período</div><div class="val mono-num">${money(totalFat)}</div></div>
+    <div class="stat"><div class="ico">${icon('services')}</div><div class="lbl">Serviços realizados</div><div class="val mono-num">${totalAt}</div></div>
+  </div>
+  ${cards}`;
+}
+
 const donutColors=['#c8408a','#e6a94f','#7fb0e6','#54bd82','#d98cb3','#e6c78f'];
 function donutSVG(data){
   const entries=Object.entries(data).sort((x,y)=>y[1]-x[1]);
